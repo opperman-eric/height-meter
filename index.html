@@ -1,40 +1,161 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#173d31"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Height Meter"><title>Height Meter</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#000000"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Height Meter"><title>Height Meter</title>
 <style>
-:root{font-family:system-ui,sans-serif;color:#193c32;background:#edf1e9}*{box-sizing:border-box}body{margin:0;padding: max(24px,env(safe-area-inset-top)) 18px max(32px,env(safe-area-inset-bottom))}main{max-width:560px;margin:auto}header{padding:10px 4px 22px}h1{font-size:36px;letter-spacing:-1.5px;margin:8px 0}p{line-height:1.55}header p{margin:0;color:#587065}.eyebrow{font-size:12px;font-weight:750;letter-spacing:2px;text-transform:uppercase}section{background:#fff;border:1px solid #d9e2d5;border-radius:22px;padding:22px;margin-bottom:16px}h2{font-size:19px;margin:0 0 18px}label{display:block;font-size:14px;font-weight:650;margin:16px 0 7px}input{width:100%;font:inherit;font-size:20px;border:1px solid #b9cbbb;background:#fafcf8;border-radius:10px;padding:12px;color:inherit}input:focus{outline:3px solid #c6df9c}small,.hint{display:block;color:#607268;font-size:13px;line-height:1.5;margin:7px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}button{font:inherit;font-weight:650;border:0;border-radius:12px;padding:15px;background:#173d31;color:white;width:100%;margin-top:12px;cursor:pointer}button.secondary{background:#eaf0e4;color:#193c32}button:disabled{opacity:.4;cursor:default}.meter{background:#173d31;color:#e8f4d3;text-align:center;border-radius:16px;padding:24px 12px}.angle{font-size:64px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-3px}.meter p{margin:0;font-size:13px}.result{background:#dcebbd;border-color:#c7dba2}.height{font-size:58px;font-weight:750;letter-spacing:-2px}.height span{font-size:22px;letter-spacing:0}#details{font-size:14px;line-height:1.8}details{font-size:14px;line-height:1.6}summary{cursor:pointer;font-weight:650}svg{width:100%;height:auto;margin-top:14px}#status{min-height:40px}footer{font-size:12px;color:#607268;text-align:center;padding:4px 12px}button:focus-visible{outline:3px solid #8eae59;outline-offset:3px}
+:root{color-scheme:dark;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#00ff66;background:#000;font-size:14px}
+*{box-sizing:border-box}
+body{margin:0;padding:max(20px,env(safe-area-inset-top)) 16px max(28px,env(safe-area-inset-bottom));background:#000}
+main{max-width:600px;margin:auto}
+header{padding:8px 0 20px;border-bottom:2px solid #00ff66;margin-bottom:20px}
+h1{font-size:30px;font-weight:700;letter-spacing:0;margin:10px 0;text-transform:uppercase}
+p{line-height:1.6}header p{margin:0;color:#80ffaa}
+.eyebrow{font-size:12px;letter-spacing:1px;text-transform:uppercase}
+section{background:#000;border:1px solid #008035;border-radius:0;padding:18px;margin-bottom:18px}
+h2{font-size:16px;margin:0 0 18px;text-transform:uppercase;line-height:1.5}
+label{display:block;font-size:13px;font-weight:600;margin:16px 0 7px}
+input{width:100%;min-width:0;font:inherit;font-size:20px;border:1px solid #00b84a;background:#000;border-radius:0;padding:12px;color:#00ff66;caret-color:#00ff66}
+input::placeholder{color:#70b98c;opacity:1}
+input:focus{outline:2px solid #00ff66;outline-offset:2px}
+small,.hint{display:block;color:#80ffaa;font-size:12px;line-height:1.6;margin:8px 0}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+button{font:inherit;font-weight:700;text-transform:uppercase;border:1px solid #00ff66;border-radius:0;padding:14px 10px;background:#000;color:#00ff66;width:100%;min-height:48px;margin-top:12px;cursor:pointer;line-height:1.5}
+button.secondary{border-color:#008035;background:#000;color:#80ffaa}
+button:disabled{color:#66a87d;border-color:#335c41;cursor:default}
+button:enabled:active{background:#00ff66;color:#000}
+button:focus-visible{outline:2px solid #00ff66;outline-offset:3px}
+.meter{background:#000;color:#00ff66;border:1px solid #00ff66;text-align:center;border-radius:0;padding:20px 10px}
+.angle{font-size:64px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-2px}
+.meter p{margin:0;font-size:12px}
+.result{background:#000;border:2px solid #00ff66}
+.height{font-size:56px;font-weight:700;letter-spacing:-2px;overflow-wrap:anywhere}
+.height span{font-size:22px;letter-spacing:0}
+#math{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.8 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#000;border:1px solid #008035;border-radius:0;padding:12px;color:#00ff66}
+#details{font-size:13px;line-height:1.8;overflow-wrap:anywhere}
+details{font-size:13px;line-height:1.6}summary{cursor:pointer;font-weight:700;text-transform:uppercase}
+svg{width:100%;height:auto;margin-top:14px;color:#00ff66}
+#status{min-height:40px}#countdown{font-size:16px;color:#00ff66;font-weight:700}
+footer{font-size:12px;color:#80ffaa;text-align:center;padding:4px 12px}
+::selection{background:#00ff66;color:#000}
+@media(max-width:360px){section{padding:12px}.grid{gap:10px}h1{font-size:26px}button{font-size:12px}}
 </style></head><body><main>
-<header><div class="eyebrow">Field tools / 01</div><h1>Height Meter<span style="color:#72934b"> ↗</span></h1><p>A few steps. One angle. A whole new perspective.</p></header>
-<section><h2>01 &nbsp; Your measurements</h2><div class="grid"><div><label for="height">Your height · cm</label><input id="height" type="number" min="50" max="250" step="0.1" placeholder="175" inputmode="decimal"></div><div><label for="offset">Top of head to eyes · cm</label><input id="offset" type="number" min="0" max="30" step="0.1" value="12" inputmode="decimal"></div></div><small>12 cm is a starting estimate. Measure this offset for a better result, or enter your eye height in the first field and set the offset to 0.</small><label for="stride">Length of one step · cm</label><input id="stride" type="number" min="1" max="250" step="0.1" placeholder="70" inputmode="decimal"><small>One footfall to the next, not a two-step stride. Walk 10 normal steps, measure the distance, and divide by 10.</small></section>
-<section><h2>02 &nbsp; Sight the top</h2><p class="hint">Hold the phone on its side at eye level, with the screen facing sideways. Sight along a long edge toward the <strong>top end of the phone</strong> (the earpiece end). Raise that end toward the treetop. Keep the phone’s screen plane vertical.</p><div class="meter"><div class="angle" id="live">—°</div><p>Live angle above horizontal</p></div><button id="enable">Enable iPhone level</button><p id="status" class="hint" role="status" aria-live="polite">Enable the level and allow Motion &amp; Orientation access, or enter an angle below.</p><div class="grid"><button id="zero" class="secondary" disabled>Set level zero</button><button id="capture" disabled>Capture angle</button></div><small>Optional: aim at a point level with your eyes, then set zero. A captured angle stays fixed while you walk.</small><label for="angle">Captured / manual angle · °</label><input id="angle" type="number" min="0.1" max="85" step="0.1" placeholder="e.g. 35.0" inputmode="decimal"><small>You can also type a reading from the iPhone Measure app’s Level. Use the upward angle from horizontal.</small></section>
-<section><h2>03 &nbsp; Walk to the base</h2><label for="steps">Number of steps</label><input id="steps" type="number" min="1" max="100000" step="1" placeholder="e.g. 20" inputmode="numeric"><p class="hint">Start at the point where you captured the angle. Walk directly to the base using your normal step length. This method assumes level ground and a vertical object.</p></section>
-<section class="result" aria-live="polite"><div class="eyebrow">Estimated height</div><div class="height" id="result">— <span>m</span></div><div id="details">Enter your measurements, angle and steps to calculate.</div></section>
-<section><details><summary>How your two triangles work</summary><p>The little triangle behind you has your eye height as its vertical side. Its horizontal side is eye height ÷ tan(angle).</p><p>Add that little distance to the distance you walked. The big triangle’s height is that total distance × tan(angle).</p><p>This simplifies to <strong>height = eye height + distance × tan(angle)</strong>.</p><svg viewBox="0 0 420 200" role="img" aria-label="Little triangle behind the observer extends the line of sight to ground. Big triangle reaches the treetop."><path d="M20 175H390V20Z" fill="#edf3df" stroke="#517b4a" stroke-width="2"/><path d="M115 137H390M115 137V175" stroke="#72934b" stroke-width="2" stroke-dasharray="5 4"/><circle cx="115" cy="137" r="5" fill="#173d31"/><g font-family="system-ui" font-size="12" fill="#193c32"><text x="95" y="124">Eye</text><text x="27" y="194">Little triangle</text><text x="210" y="194">Steps × step length</text><text x="295" y="105">Big triangle</text><text x="347" y="15">Tree top</text></g></svg><p>Results are estimates. Uneven ground, irregular steps, leaning trees and small aiming errors affect accuracy. Stand far enough back to keep the angle under 60° where possible.</p></details></section>
-<button class="secondary" id="reset">Start a new measurement</button><footer><p>Measurements are saved only in this browser on this device.</p></footer>
+<header><div class="eyebrow">Field tools / 01</div><h1>Height Meter<span> ↗</span></h1><p>Clinometric height estimation from elevation angle and paced horizontal distance.</p></header>
+<section><h2>01 &nbsp; Observer parameters</h2><div class="grid"><div><label for="height">Observer stature · cm</label><input id="height" type="number" min="50" max="250" step="0.1" placeholder="175" inputmode="decimal"></div><div><label for="offset">Vertex-to-eye offset · cm</label><input id="offset" type="number" min="0" max="30" step="0.1" value="12" inputmode="decimal"></div></div><small>The default offset of 12 cm is nominal. Enter the measured vertex-to-eye separation. Alternatively, enter eye height as observer stature with an offset of 0 cm.</small><label for="stride">Step length · cm</label><input id="stride" type="number" min="1" max="250" step="0.1" placeholder="70" inputmode="decimal"><small>Step length is the distance between successive footfalls. Calibration: divide a measured walking distance by the corresponding step count. A full gait stride comprises two steps.</small></section>
+<section><h2>02 &nbsp; Elevation acquisition</h2><p class="hint">Position the sighting edge at eye height with the screen plane vertical. Align the longitudinal edge toward the target apex, sighting toward the <strong>earpiece end</strong> (device +Y axis).</p><div class="meter"><div class="angle" id="live">—°</div><p>Corrected elevation angle relative to horizontal</p></div><button id="enable">Enable orientation sensor</button><p id="status" class="hint" role="status" aria-live="polite">Enable the level and allow Motion &amp; Orientation access, or enter an angle below.</p><div class="grid"><button id="zero" class="secondary" disabled>Set level zero</button><button id="capture" disabled>Start capture countdown</button></div><label for="delay">Capture delay / seconds</label><input id="delay" type="number" min="3" max="30" step="1" value="5" inputmode="numeric"><p id="countdown" role="status" aria-live="polite" class="hint">Capture delay: 5 seconds.</p><small>A short tone confirms timer activation. Aim during the countdown. Two high tones confirm a saved angle; a low tone indicates capture failure. Device media volume must be audible. Select the capture button again to cancel. Capture is cancelled if the page is hidden.</small><small>Optional zero calibration: align the sighting axis with an eye-level horizontal reference, then select Set level zero. The acquired angle remains fixed during distance measurement.</small><label for="angle">Captured / manual angle · °</label><input id="angle" type="number" min="0.1" max="85" step="0.1" placeholder="e.g. 35.0" inputmode="decimal"><small>Manual input accepts an elevation reading from the iOS Measure Level function. Positive angles indicate elevation above horizontal.</small></section>
+<section><h2>03 &nbsp; Paced baseline measurement</h2><label for="steps">Step count</label><input id="steps" type="number" min="1" max="100000" step="1" placeholder="e.g. 20" inputmode="numeric"><p class="hint">Count consecutive steps from the observation station to the target base using the calibrated step length. The model assumes a horizontal baseline and a vertical target.</p></section>
+<section class="result" aria-live="polite"><div class="eyebrow">Estimated target height</div><div class="height" id="result">— <span>m</span></div><div id="details">Calculation pending valid observer parameters, elevation angle and step count.</div></section>
+<section><h2>04 &nbsp; Calculation trace</h2><p class="hint">SI units throughout. Intermediate values are displayed to 12 significant figures; calculations use the full available floating-point precision.</p><pre id="math" aria-live="polite">Calculation pending valid input parameters.</pre></section>
+<section><details><summary>Geometric model and assumptions</summary><p>The auxiliary triangle extends the sightline behind the observation station to the ground plane. Its vertical component is the eye height E; its horizontal component is x = E / tan(theta).</p><p>The complete triangle has horizontal component B = D + x. The target height is H = B * tan(theta).</p><p>Algebraic reduction: <strong>height = eye height + distance × tan(angle)</strong>.</p><svg viewBox="0 0 420 200" role="img" aria-label="Auxiliary triangle behind the observer extends the line of sight to ground. Complete triangle reaches the treetop."><path d="M20 175H390V20Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M115 137H390M115 137V175" stroke="currentColor" stroke-width="2" stroke-dasharray="5 4"/><circle cx="115" cy="137" r="5" fill="currentColor"/><g font-family="monospace" font-size="12" fill="currentColor"><text x="95" y="124">Eye</text><text x="27" y="194">Auxiliary triangle</text><text x="210" y="194">Steps × step length</text><text x="295" y="105">Complete triangle</text><text x="347" y="15">Target apex</text></g></svg><p>Model limitations: nonhorizontal terrain, target inclination, step-length variability and angular error introduce height error. Elevation angles below 60 degrees are preferable. Displayed precision does not represent measurement accuracy.</p></details></section>
+<button class="secondary" id="reset">Reset observation</button><footer><p>Input parameters are retained in device-local browser storage.</p></footer>
 </main><script>
 'use strict';
 const $=id=>document.getElementById(id), fields=['height','offset','stride','angle','steps'];
 let baseline=0, raw=null, lastReading=0, usable=false, enabled=false, timer;
+let audio=null, pendingCapture=null, countdownTimer=null;
+function sensorFresh(){return enabled&&raw!==null&&Date.now()-lastReading<=2000;}
+function syncCapture(){ $("capture").disabled=!pendingCapture&&!sensorFresh(); $("zero").disabled=!!pendingCapture||!sensorFresh()||!planeIsVertical; }
+let planeIsVertical=false;
+function tone(frequency,duration=0.12,offset=0){
+ if(!audio||audio.state!=="running")return;
+ const oscillator=audio.createOscillator(),gain=audio.createGain(),at=audio.currentTime+offset;
+ oscillator.frequency.value=frequency;gain.gain.setValueAtTime(0,at);gain.gain.linearRampToValueAtTime(0.25,at+0.01);gain.gain.exponentialRampToValueAtTime(0.001,at+duration);
+ oscillator.connect(gain);gain.connect(audio.destination);oscillator.start(at);oscillator.stop(at+duration+0.02);oscillator.onended=()=>{oscillator.disconnect();gain.disconnect();};
+}
+function endCountdown(message){clearInterval(countdownTimer);countdownTimer=null;pendingCapture=null;$("capture").textContent="Start capture countdown";$("delay").disabled=false;$("enable").disabled=false;$("countdown").textContent=message;syncCapture();}
+
 try{const saved=JSON.parse(localStorage.getItem('height-meter-v1')||'{}');for(const id of fields)if(typeof saved[id]==='string')$(id).value=saved[id];}catch{}
 function number(id){return $(id).value.trim()===''?NaN:Number($(id).value);}
-function update(){const data=Object.fromEntries(fields.map(id=>[id,$(id).value]));try{localStorage.setItem('height-meter-v1',JSON.stringify(data));}catch{$('status').textContent='Browser storage is unavailable. Keep this page open to retain your measurements.';}
+function update(){const data=Object.fromEntries(fields.map(id=>[id,$(id).value]));try{localStorage.setItem('height-meter-v1',JSON.stringify(data));}catch{$('status').textContent='Browser storage is unavailable. Keep this page open to retain the measurement inputs.';}
  const h=number('height'),o=number('offset'),s=number('stride'),a=number('angle'),n=number('steps');
- if(!fields.every(id=>$(id).value!==''&&$(id).checkValidity())||h<=o){$('result').innerHTML='— <span>m</span>';$('details').textContent='Enter valid measurements: height above eye offset, a positive step length, an angle from 0.1° to 85°, and whole steps.';return;}
+ if(!fields.every(id=>$(id).value!==''&&$(id).checkValidity())||h<=o){$('result').innerHTML='— <span>m</span>';$('details').textContent='Required input: observer stature exceeding the vertex-to-eye offset, positive step length, an angle from 0.1° to 85°, and whole steps.';$('math').textContent='Calculation pending valid input parameters.';return;}
  const eye=(h-o)/100,d=n*s/100,t=Math.tan(a*Math.PI/180),little=eye/t,total=(d+little)*t;
- $('result').innerHTML=total.toFixed(2)+' <span>m</span>';$('details').textContent=`Distance walked: ${d.toFixed(2)} m · Eye height: ${eye.toFixed(2)} m\nLittle triangle distance: ${little.toFixed(2)} m\nBig triangle distance: ${(d+little).toFixed(2)} m\n${eye.toFixed(2)} + ${d.toFixed(2)} × tan(${a}°) = ${total.toFixed(2)} m`;$('details').style.whiteSpace='pre-line';}
+ const f=value=>Number(value).toPrecision(12);
+ $('math').textContent=`INPUT PARAMETERS
+h = ${h} cm  [observer stature]
+o = ${o} cm  [vertex-to-eye offset]
+s = ${s} cm/step  [step length]
+n = ${n} steps  [step count]
+theta = ${a} deg  [captured/manual elevation]
+
+SI CONVERSION
+E = (h - o) / 100
+  = (${h} - ${o}) / 100 = ${f(eye)} m
+L = s / 100 = ${s} / 100 = ${f(s/100)} m/step
+theta_rad = theta * pi / 180
+      = ${a} * ${f(Math.PI)} / 180
+      = ${f(a*Math.PI/180)} rad
+
+TRIGONOMETRIC FACTOR
+T = tan(theta_rad) = ${f(t)}
+
+HORIZONTAL BASELINE
+D = n * L = ${n} * ${f(s/100)}
+  = ${f(d)} m
+
+AUXILIARY TRIANGLE
+x = E / T = ${f(eye)} / ${f(t)}
+  = ${f(little)} m
+
+COMPLETE TRIANGLE
+B = D + x = ${f(d)} + ${f(little)}
+  = ${f(d+little)} m
+H = B * T = ${f(d+little)} * ${f(t)}
+  = ${f(total)} m
+
+DIRECT-FORM CHECK
+rise = D * T = ${f(d*t)} m
+H = E + rise = ${f(eye)} + ${f(d*t)}
+  = ${f(eye+d*t)} m
+Residual = H_complete - H_direct
+         = ${f(total-(eye+d*t))} m
+
+REPORTED HEIGHT
+H = ${total.toFixed(2)} m`;
+ $('result').innerHTML=total.toFixed(2)+' <span>m</span>';$('details').textContent=`Horizontal baseline: ${d.toFixed(2)} m · Eye height: ${eye.toFixed(2)} m\nAuxiliary triangle distance: ${little.toFixed(2)} m\nComplete triangle distance: ${(d+little).toFixed(2)} m\n${eye.toFixed(2)} + ${d.toFixed(2)} × tan(${a}°) = ${total.toFixed(2)} m`;$('details').style.whiteSpace='pre-line';}
 fields.forEach(id=>$(id).addEventListener('input',update));update();
-function stale(){usable=false;$('capture').disabled=true;$('zero').disabled=true;$('live').textContent='—°';}
+function stale(){usable=false;syncCapture();$('live').textContent='—°';}
 function orientation(e){if(!Number.isFinite(e.beta)||!Number.isFinite(e.gamma))return;
  // Vertical component of the phone's long (+Y, earpiece) axis, independent of screen rotation.
  const b=e.beta*Math.PI/180,g=e.gamma*Math.PI/180;
  raw=Math.asin(Math.max(-1,Math.min(1,Math.sin(b))))*180/Math.PI;
  const planeVertical=Math.abs(Math.cos(b)*Math.cos(g))<0.35;
  lastReading=Date.now();const angle=raw-baseline;usable=planeVertical&&angle>0&&angle<=85;
- $('live').textContent=angle.toFixed(1)+'°';$('capture').disabled=!usable;$('zero').disabled=!planeVertical;
- $('status').textContent=!planeVertical?'Turn the screen sideways so its plane is vertical.':angle<=0?'Raise the earpiece end above horizontal to aim at the top.':angle>85?'Move farther back: the angle is too steep.':'Ready. Aim along the long edge toward the earpiece end, then capture.';
+ $('live').textContent=angle.toFixed(1)+'°';planeIsVertical=planeVertical;syncCapture();
+ if(!pendingCapture)$('status').textContent=!planeVertical?'Turn the screen sideways so its plane is vertical.':angle<=0?'Raise the earpiece end above horizontal to aim at the top.':angle>85?'Move farther back: the angle is too steep.':'Ready. Aim along the long edge toward the earpiece end, then capture.';
 }
 $('enable').addEventListener('click',async()=>{try{if(!window.isSecureContext)throw Error('The level needs HTTPS. Use the secure hosted URL, or enter the angle manually.');if(!window.DeviceOrientationEvent)throw Error('This browser has no orientation sensor. Enter the angle manually.');if(typeof DeviceOrientationEvent.requestPermission==='function'&&await DeviceOrientationEvent.requestPermission()!=='granted')throw Error('Motion access was not granted. Enable it in Safari settings or enter the angle manually.');if(!enabled){window.addEventListener('deviceorientation',orientation);enabled=true;timer=setInterval(()=>{if(Date.now()-lastReading>2000){stale();$('status').textContent='Waiting for orientation readings. Keep this page visible, or enter an angle manually.';}},1000);}$('status').textContent='Waiting for the phone level…';$('enable').textContent='Retry sensor access';}catch(error){$('status').textContent=error.message;}});
-$('capture').addEventListener('click',()=>{if(!usable||Date.now()-lastReading>2000)return stale();$('angle').value=(raw-baseline).toFixed(1);update();$('status').textContent='Angle captured. You can now walk to the base and count your steps.';});
-$('zero').addEventListener('click',()=>{if(raw===null||Date.now()-lastReading>2000)return stale();if(Math.abs(raw)>15){$('status').textContent='Aim close to horizontal before setting zero (within 15°).';return;}baseline=raw;usable=false;$('capture').disabled=true;$('live').textContent='0.0°';$('status').textContent='Level zero set. Now aim at the top.';});
-document.addEventListener('visibilitychange',()=>{if(document.hidden)stale();});
-$('reset').addEventListener('click',()=>{$('angle').value='';$('steps').value='';baseline=0;update();$('status').textContent='Ready for a new measurement. Level calibration reset.';$('angle').focus();});
+$('capture').addEventListener('click',async()=>{
+ if(pendingCapture){endCountdown('Capture countdown cancelled.');return;}
+ if(!sensorFresh()){stale();return;}
+ if(!$('delay').checkValidity()||$('delay').value===''){$('countdown').textContent='Capture delay must be an integer from 3 to 30 seconds.';return;}
+ const request={deadline:0,lastSecond:null};pendingCapture=request;
+ $('capture').textContent='Cancel capture';$('delay').disabled=true;$('enable').disabled=true;syncCapture();
+ $('countdown').textContent='Initializing audible capture signal...';
+ try{
+  const Audio=window.AudioContext||window.webkitAudioContext;
+  if(!Audio)throw Error('Audio output is unavailable in this browser.');
+  if(!audio)audio=new Audio();
+  await audio.resume();
+  if(pendingCapture!==request)return;
+  if(audio.state!=='running')throw Error('Audio output could not be enabled.');
+ }catch(error){if(pendingCapture===request)endCountdown(error.message+' Countdown not started.');return;}
+ if(document.hidden){endCountdown('Capture cancelled: page hidden.');return;}
+ const seconds=Number($('delay').value);request.deadline=performance.now()+seconds*1000;
+ tone(650);$('status').textContent='Countdown active. Align the sighting axis with the target apex.';
+ function tick(){
+  if(pendingCapture!==request)return;
+  const remaining=request.deadline-performance.now();
+  if(remaining>0){const second=Math.ceil(remaining/1000);if(second!==request.lastSecond){request.lastSecond=second;$('countdown').textContent=`Capture in ${second} s`;$('capture').textContent=`Cancel capture (${second} s)`;if(second<=3)tone(650,0.07);}return;}
+  if(document.hidden||remaining< -750||!usable||!sensorFresh()||audio.state!=='running'){
+   endCountdown('Capture failed: invalid or stale orientation, interrupted audio, or delayed timer. Previous angle retained.');
+   $('status').textContent='Capture failed. Confirm the screen plane is vertical, the angle is 0.1 to 85 degrees, and the page remains visible; then restart the countdown.';tone(220,0.5);return;
+  }
+  const acquired=(raw-baseline).toFixed(1);
+  if(Number(acquired)<0.1){endCountdown('Capture failed: elevation below 0.1 degrees. Previous angle retained.');tone(220,0.5);return;}
+  $('angle').value=acquired;update();endCountdown(`Capture complete: ${acquired} degrees.`);
+  $('status').textContent='Elevation angle acquired. Proceed with paced baseline measurement.';tone(1050,0.16);tone(1400,0.2,0.23);
+ }
+ tick();countdownTimer=setInterval(tick,50);
+});
+$('zero').addEventListener('click',()=>{if(pendingCapture)return;if(raw===null||Date.now()-lastReading>2000)return stale();if(Math.abs(raw)>15){$('status').textContent='Aim close to horizontal before setting zero (within 15°).';return;}baseline=raw;usable=false;syncCapture();$('live').textContent='0.0°';$('status').textContent='Level zero set. Now aim at the top.';});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){if(pendingCapture)endCountdown('Capture cancelled: page hidden.');stale();}});
+$('reset').addEventListener('click',()=>{if(pendingCapture)endCountdown('Capture cancelled: observation reset.');$('angle').value='';$('steps').value='';baseline=0;update();$('status').textContent='Observation reset. Zero correction cleared.';$('angle').focus();});
 </script></body></html>
